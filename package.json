@@ -16,6 +16,7 @@
     "@pixiv/three-vrm": "^1.0.5",
     "@react-three/drei": "^9.40.5",
     "@react-three/fiber": "^8.9.1",
+    "@types/three": "^0.146.0",
     "kalidokit": "^1.1.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

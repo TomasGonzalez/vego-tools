@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -24,25 +24,25 @@ const Avatar = () => {
   });
 
   useEffect(() => {
-    loader.current.register((parser) => {
+    loader.current.register((parser: any) => {
       return new VRMLoaderPlugin(parser);
     });
 
     loader.current.load(
       '/3d-models/vrm-characters/power.vrm',
-      (gltf) => {
+      (gltf: any) => {
         const vrm = gltf.userData.vrm;
         VRMUtils.removeUnnecessaryVertices(gltf.scene);
         VRMUtils.removeUnnecessaryJoints(gltf.scene);
         setAvatar(vrm);
       },
-      (progress) =>
+      (progress: any) =>
         console.log(
           'Loading model...',
           100.0 * (progress.loaded / progress.total),
           '%'
         ),
-      (error) => console.error(error)
+      (error: any) => console.error(error)
     );
   }, [scene, setAvatar]);
 

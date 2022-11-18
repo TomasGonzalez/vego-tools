@@ -95,11 +95,7 @@ function useFaceTracker() {
       );
 
       oldLookTarget.current.copy(lookTarget);
-
-      avatar.lookAt?.applier.applyYawPitch(
-        riggedFace.pupil.x,
-        riggedFace.pupil.y
-      );
+      avatar?.lookAt?.applier.lookAt(lookTarget);
     }
   });
 }
