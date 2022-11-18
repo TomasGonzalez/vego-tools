@@ -1,0 +1,32 @@
+{
+  "name": "vego-tools-vite",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mediapipe/camera_utils": "^0.3.1640029074",
+    "@mediapipe/control_utils": "^0.6.1629159505",
+    "@mediapipe/drawing_utils": "^0.3.1620248257",
+    "@mediapipe/holistic": "^0.5.1635989137",
+    "@pixiv/three-vrm": "^1.0.5",
+    "@react-three/drei": "^9.40.5",
+    "@react-three/fiber": "^8.9.1",
+    "kalidokit": "^1.1.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "three": "^0.146.0",
+    "zustand": "^4.1.4"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.24",
+    "@types/react-dom": "^18.0.8",
+    "@vitejs/plugin-react": "^2.2.0",
+    "typescript": "^4.6.4",
+    "vite": "^3.2.3"
+  }
+}
