@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -8,16 +8,25 @@ import useUpdatePose from './hooks/useUpdatePose';
 import useUpdateHands from './hooks/useUpdateHands';
 
 import useMainStore from '../../stores/useMainStore';
+import useCaptureMovement from './hooks/useCaptureMovement';
 
-const Avatar = () => {
+export type TMode = 'record' | 'play';
+
+const Avatar = ({ modelUrl }: { modelUrl: string }) => {
   const { scene } = useThree();
   const setAvatar = useMainStore(({ setAvatar }) => setAvatar);
   const avatar = useMainStore(({ avatar }) => avatar);
   const loader = useRef(new GLTFLoader());
+  const [mode, setMode] = useState<TMode>('record');
 
-  useUpdateFace();
-  useUpdatePose();
-  useUpdateHands();
+  //Avatar movement recorder
+  const { recordPoseMovement, recordFaceMovement, recordHandsMovement } =
+    useCaptureMovement();
+
+  //Avatar VRM updater
+  useUpdatePose(recordPoseMovement, mode);
+  useUpdateFace(recordFaceMovement);
+  useUpdateHands(recordHandsMovement);
 
   useFrame(({}, delta) => {
     avatar?.update(delta);
@@ -29,7 +38,7 @@ const Avatar = () => {
     });
 
     loader.current.load(
-      '/3d-models/vrm-characters/power.vrm',
+      modelUrl,
       (gltf: any) => {
         const vrm = gltf.userData.vrm;
         VRMUtils.removeUnnecessaryVertices(gltf.scene);

@@ -2,7 +2,7 @@ import { useFrame } from '@react-three/fiber';
 import useTransformHelpers from './useTransformHelpers';
 import useTrackingStore from '../../../stores/useMainStore';
 
-function useHandsTracker() {
+function useHandsTracker(recordHandsMovement: any) {
   const { rigRotation } = useTransformHelpers();
 
   useFrame(() => {

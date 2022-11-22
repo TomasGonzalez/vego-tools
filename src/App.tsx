@@ -31,7 +31,7 @@ function App() {
         <OrbitControls />
         <spotLight position={[0, 2, 1]} intensity={0.4} />
         <Suspense>
-          <Avatar />
+          <Avatar modelUrl='/3d-models/vrm-characters/power.vrm' />
         </Suspense>
       </Canvas>
     </div>

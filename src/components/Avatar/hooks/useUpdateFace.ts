@@ -4,10 +4,10 @@ import { Face } from 'kalidokit';
 import { useRef } from 'react';
 import { Euler } from 'three';
 import { clamp, lerp } from 'three/src/math/MathUtils';
-import useTrackingStore, { TState } from '../../../stores/useMainStore';
+import useTrackingStore from '../../../stores/useMainStore';
 import useTransformHelpers from './useTransformHelpers';
 
-function useFaceTracker() {
+function useFaceTracker(recordFaceMovement: any) {
   const { rigRotation } = useTransformHelpers();
   const oldLookTarget = useRef(new Euler());
 
