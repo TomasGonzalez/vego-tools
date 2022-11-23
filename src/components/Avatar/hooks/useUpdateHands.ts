@@ -1,14 +1,15 @@
-import { useFrame } from '@react-three/fiber';
+import { THand } from 'kalidokit';
 import useTransformHelpers from './useTransformHelpers';
 import useTrackingStore from '../../../stores/useMainStore';
 
 function useHandsTracker() {
   const { rigRotation } = useTransformHelpers();
 
-  useFrame(() => {
+  const applyHands = (
+    riggedLeftHand: THand<'Left'> | null,
+    riggedRightHand: THand<'Right'> | null
+  ) => {
     const riggedPose = useTrackingStore.getState().poseRig;
-    const riggedLeftHand = useTrackingStore.getState().leftHandRig;
-    const riggedRightHand = useTrackingStore.getState().rightHandRig;
 
     if (riggedLeftHand) {
       rigRotation('LeftHand', {
@@ -81,7 +82,8 @@ function useHandsTracker() {
       );
       rigRotation('RightLittleDistal', riggedRightHand.RightLittleDistal);
     }
-  });
+  };
+  return applyHands;
 }
 
 export default useHandsTracker;
