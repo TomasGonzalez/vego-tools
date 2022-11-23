@@ -1,21 +1,21 @@
-import { useFrame } from '@react-three/fiber';
 import { VRMExpressionPresetName } from '@pixiv/three-vrm';
-import { Face } from 'kalidokit';
+import { Face, TFace } from 'kalidokit';
 import { useRef } from 'react';
 import { Euler } from 'three';
 import { clamp, lerp } from 'three/src/math/MathUtils';
+
 import useTrackingStore from '../../../stores/useMainStore';
 import useTransformHelpers from './useTransformHelpers';
 
-function useFaceTracker(recordFaceMovement: any) {
+function useFaceTracker() {
   const { rigRotation } = useTransformHelpers();
   const oldLookTarget = useRef(new Euler());
 
-  useFrame(() => {
-    const riggedFace = useTrackingStore.getState().faceRig;
+  const applyFace = (newPose: TFace) => {
     const avatar = useTrackingStore.getState().avatar;
-    if (riggedFace) {
-      rigRotation('Neck', riggedFace.head, 0.7);
+
+    if (newPose) {
+      rigRotation('Neck', newPose.head, 0.7);
 
       if (!avatar) return;
       // Blendshapes and Preset Name Schema
@@ -25,25 +25,25 @@ function useFaceTracker(recordFaceMovement: any) {
       // Simple example without winking. Interpolate based on old blendshape, then stabilize blink with `Kalidokit` helper function.
       // for VRM, 1 is closed, 0 is open.
       if (Blendshape) {
-        riggedFace.eye.l = lerp(
-          clamp(1 - riggedFace.eye.l, 0, 1),
+        newPose.eye.l = lerp(
+          clamp(1 - newPose.eye.l, 0, 1),
           Blendshape.getValue(PresetName.Blink) as number,
           0.5
         );
 
-        riggedFace.eye.r = lerp(
-          clamp(1 - riggedFace.eye.r, 0, 1),
+        newPose.eye.r = lerp(
+          clamp(1 - newPose.eye.r, 0, 1),
           Blendshape.getValue(PresetName.Blink) as number,
           0.5
         );
 
-        riggedFace.eye = Face.stabilizeBlink(riggedFace.eye, riggedFace.head.y);
-        Blendshape.setValue(PresetName.Blink, riggedFace.eye.l);
+        newPose.eye = Face.stabilizeBlink(newPose.eye, newPose.head.y);
+        Blendshape.setValue(PresetName.Blink, newPose.eye.l);
 
         // Interpolate and set mouth blendshapes Blendshape.setValue(
         PresetName.Ih,
           lerp(
-            riggedFace.mouth.shape.I,
+            newPose.mouth.shape.I,
             Blendshape.getValue(PresetName.Ih) as number,
             0.5
           );
@@ -51,7 +51,7 @@ function useFaceTracker(recordFaceMovement: any) {
         Blendshape.setValue(
           PresetName.Aa,
           lerp(
-            riggedFace.mouth.shape.A,
+            newPose.mouth.shape.A,
             Blendshape.getValue(PresetName.Aa) as number,
             0.5
           )
@@ -60,7 +60,7 @@ function useFaceTracker(recordFaceMovement: any) {
         Blendshape.setValue(
           PresetName.Ee,
           lerp(
-            riggedFace.mouth.shape.E,
+            newPose.mouth.shape.E,
             Blendshape.getValue(PresetName.Ee) as number,
             0.5
           )
@@ -69,7 +69,7 @@ function useFaceTracker(recordFaceMovement: any) {
         Blendshape.setValue(
           PresetName.Oh,
           lerp(
-            riggedFace.mouth.shape.O,
+            newPose.mouth.shape.O,
             Blendshape.getValue(PresetName.Oh) as number,
             0.5
           )
@@ -78,7 +78,7 @@ function useFaceTracker(recordFaceMovement: any) {
         Blendshape.setValue(
           PresetName.Ou,
           lerp(
-            riggedFace.mouth.shape.U,
+            newPose.mouth.shape.U,
             Blendshape.getValue(PresetName.Ou) as number,
             0.5
           )
@@ -88,16 +88,19 @@ function useFaceTracker(recordFaceMovement: any) {
       //PUPILS
       //interpolate pupil and keep a copy of the value
       let lookTarget = new Euler(
-        lerp(oldLookTarget.current.x, riggedFace.pupil.y, 0.4),
-        lerp(oldLookTarget.current.y, riggedFace.pupil.x, 0.4),
+        lerp(oldLookTarget.current.x, newPose.pupil.y, 0.4),
+        lerp(oldLookTarget.current.y, newPose.pupil.x, 0.4),
         0,
         'XYZ'
       );
 
       oldLookTarget.current.copy(lookTarget);
-      avatar?.lookAt?.applier.lookAt(lookTarget);
+      //@ts-ignore
+      newPose?.lookAt?.applier.lookAt(lookTarget);
     }
-  });
+  };
+
+  return applyFace;
 }
 
 export default useFaceTracker;

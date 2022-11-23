@@ -1,10 +1,7 @@
 import { TPose } from 'kalidokit';
-import { useFrame } from '@react-three/fiber';
-import useTrackingStore from '../../../stores/useMainStore';
 import useTransformHelpers from './useTransformHelpers';
-import { TMode } from '..';
 
-function usePoseTracker(recordMovement: any, mode: TMode) {
+function usePoseTracker() {
   const { rigRotation, rigPosition } = useTransformHelpers();
 
   const applyPose = (newPose: TPose) => {
@@ -33,18 +30,7 @@ function usePoseTracker(recordMovement: any, mode: TMode) {
     rigRotation('RightLowerLeg', newPose.RightLowerLeg, 1, 0.3);
   };
 
-  useFrame(() => {
-    if (mode === 'record') {
-      const riggedPose = useTrackingStore.getState().poseRig;
-      if (riggedPose) {
-        recordMovement.current.push(riggedPose);
-        console.log(recordMovement.current);
-        applyPose(riggedPose);
-      }
-    }
-
-    // Add movement on play using recordMovement and the global timeline
-  });
+  return applyPose;
 }
 
 export default usePoseTracker;

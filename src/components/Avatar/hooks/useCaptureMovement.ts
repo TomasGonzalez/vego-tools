@@ -6,11 +6,17 @@ import { useRef } from 'react';
  */
 
 function useCaptureMovement() {
-  const recordPoseMovement = useRef([]); // here is the movement of the character will be captured
-  const recordFaceMovement = useRef([]); // here is the movement of the character will be captured
-  const recordHandsMovement = useRef([]); // here is the movement of the character will be captured
+  const recordPoseMovement = useRef<any>([]); // here is the movement of the character will be captured
+  const recordFaceMovement = useRef<any>([]); // here is the movement of the character will be captured
+  const recordLeftHandMovement = useRef<any>([]); // here is the movement of the character will be captured
+  const recordRightHandMovement = useRef<any>([]); // here is the movement of the character will be captured
 
-  return { recordPoseMovement, recordFaceMovement, recordHandsMovement };
+  return {
+    recordPoseMovement,
+    recordFaceMovement,
+    recordLeftHandMovement,
+    recordRightHandMovement,
+  };
 }
 
 export default useCaptureMovement;
