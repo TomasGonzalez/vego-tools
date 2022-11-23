@@ -1,4 +1,6 @@
 import { useFrame } from '@react-three/fiber';
+import { RefObject } from 'react';
+import config from '../../../constants/config';
 
 import useMainStore from '../../../stores/useMainStore';
 import useCaptureMovement from './useCaptureMovement';
@@ -6,7 +8,7 @@ import useFaceTracker from './useUpdateFace';
 import useHandsTracker from './useUpdateHands';
 import usePoseTracker from './useUpdatePose';
 
-function useHandleMovement(mode: string) {
+function useHandleMovement(mode: string, recordingTime: RefObject<number>) {
   const applyPose = usePoseTracker();
   const applyFace = useFaceTracker();
   const applyHands = useHandsTracker();
@@ -48,11 +50,19 @@ function useHandleMovement(mode: string) {
 
       case 'play':
         if (recordPoseMovement.current && recordFaceMovement.current) {
-          let indexAtPercentage = Math.round(
-            ((recordPoseMovement.current.length - 1) *
-              (useMainStore.getState().timeline * 100)) /
-              100
-          );
+          let indexAtPercentage = 0;
+
+          if (
+            recordingTime.current &&
+            recordingTime.current <= config.maxRecordingTime
+          ) {
+            indexAtPercentage = Math.round(
+              ((recordPoseMovement.current.length - 1) *
+                useMainStore.getState().timeline) /
+                recordingTime.current // Amount of recording time for this object
+            );
+          }
+
           applyPose(recordPoseMovement.current[indexAtPercentage]);
           applyFace(recordFaceMovement.current[indexAtPercentage]);
           applyHands(

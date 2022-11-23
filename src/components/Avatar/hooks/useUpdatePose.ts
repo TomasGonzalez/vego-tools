@@ -5,6 +5,8 @@ function usePoseTracker() {
   const { rigRotation, rigPosition } = useTransformHelpers();
 
   const applyPose = (newPose: TPose) => {
+    if (!newPose) return;
+
     rigRotation('Hips', newPose.Hips.rotation, 0.7);
     rigPosition(
       'Hips',
