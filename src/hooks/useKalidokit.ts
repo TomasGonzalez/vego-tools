@@ -140,7 +140,9 @@ const useKalidokit = (videoElement: any, cameraRef: any) => {
         width: 900,
         height: 600,
       });
-      cameraRef.current.start();
+
+      //turn off camera just for testing
+      //cameraRef.current.start();
     })();
   }, [cameraRef, videoElement]);
 };

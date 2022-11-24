@@ -2,12 +2,13 @@ import { Suspense, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 
-import Avatar from './components/Avatar';
+import Avatar from './components/avatar';
 import DraggableVideoScreen from './components/draggable-video-screen';
 import useVCaptureLogic from './hooks/useVCaptureLogic';
 import { useControls } from 'leva';
 import useMainStore from './stores/useMainStore';
 import config from './constants/config';
+import VideoTimeline from './components/video-timeline';
 
 function WrappedCanvas() {
   const { playAnimation } = useControls({
@@ -15,7 +16,6 @@ function WrappedCanvas() {
   });
 
   useFrame((state) => {
-    console.log(playAnimation);
     if (playAnimation) {
       useMainStore
         .getState()
@@ -54,12 +54,12 @@ function App() {
     <div
       style={{
         display: 'flex',
+        flexDirection: 'column',
         width: '100vw',
         height: '100vh',
       }}
     >
       <DraggableVideoScreen ref={videoElement} />
-
       <Canvas
         onCreated={({ camera }) => {
           camera.position.y = 2;
@@ -72,6 +72,7 @@ function App() {
       >
         <WrappedCanvas />
       </Canvas>
+      <VideoTimeline />
     </div>
   );
 }
