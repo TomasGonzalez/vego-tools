@@ -5,7 +5,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { useControls } from 'leva';
 import { Clock } from 'three';
 
-import useMainStore from '../../stores/useMainStore';
+import useMainStore from '../../stores/useCharacterStore';
 import useHandleMovement from './hooks/useHandleMovement';
 
 export type TMode = 'record' | 'play';

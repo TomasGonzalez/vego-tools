@@ -1,12 +1,13 @@
 import { useFrame } from '@react-three/fiber';
 import { RefObject } from 'react';
-import config from '../../../constants/config';
 
-import useMainStore from '../../../stores/useMainStore';
+import useAnimationStore from '../../../stores/useAnimationStore';
+import useMainStore from '../../../stores/useCharacterStore';
 import useCaptureMovement from './useCaptureMovement';
 import useFaceTracker from './useUpdateFace';
 import useHandsTracker from './useUpdateHands';
 import usePoseTracker from './useUpdatePose';
+import config from '../../../constants/config';
 
 function useHandleMovement(mode: string, recordingTime: RefObject<number>) {
   const applyPose = usePoseTracker();
@@ -58,7 +59,7 @@ function useHandleMovement(mode: string, recordingTime: RefObject<number>) {
           ) {
             indexAtPercentage = Math.round(
               ((recordPoseMovement.current.length - 1) *
-                useMainStore.getState().timeline) /
+                useAnimationStore.getState().currentTime) /
                 recordingTime.current // Amount of recording time for this object
             );
           }

@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import { Euler } from 'three';
 import { clamp, lerp } from 'three/src/math/MathUtils';
 
-import useTrackingStore from '../../../stores/useMainStore';
+import useTrackingStore from '../../../stores/useCharacterStore';
 import useTransformHelpers from './useTransformHelpers';
 
 function useFaceTracker() {

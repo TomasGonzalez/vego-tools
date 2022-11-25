@@ -1,6 +1,6 @@
 import { VRMHumanBoneName } from '@pixiv/three-vrm';
 import { Euler, Quaternion, Vector3 } from 'three';
-import useMainStore from '../../../stores/useMainStore';
+import useMainStore from '../../../stores/useCharacterStore';
 
 function useTransformHelpers() {
   const avatar = useMainStore.getState().avatar;

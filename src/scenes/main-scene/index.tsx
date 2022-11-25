@@ -1,35 +1,18 @@
-import { Suspense, useEffect } from 'react';
+import { Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
-import { useControls } from 'leva';
 
-import useMainStore from '../../stores/useMainStore';
-import config from '../../constants/config';
 import Avatar from '../../components/avatar';
+import useAnimationStore from '../../stores/useAnimationStore';
 
 function WrappedCanvas() {
-  const { playAnimation } = useControls({
-    playAnimation: false,
-  });
-
-  const { currentTimeline } = useControls({
-    currentTimeline: {
-      value: useMainStore.getState().timeline,
-      min: 0,
-      max: config.maxRecordingTime,
-      step: 0.1,
-    },
-  });
-
-  useEffect(() => {
-    useMainStore.getState().setTimeline(currentTimeline);
-  }, [currentTimeline]);
-
   useFrame((state) => {
-    if (playAnimation) {
-      useMainStore
+    if (useAnimationStore.getState().animationPlaying) {
+      useAnimationStore
         .getState()
-        .setTimeline(state.clock.getElapsedTime() % config.maxRecordingTime);
+        .setCurrentTime(
+          state.clock.getElapsedTime() % useAnimationStore.getState().timeLimit
+        );
     }
   });
 

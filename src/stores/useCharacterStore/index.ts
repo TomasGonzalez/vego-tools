@@ -16,8 +16,6 @@ export interface TState {
   setRightHandRig: (newRightHandRig: THand<'Right'>) => void;
   leftHandRig: THand<'Left'> | null;
   setLeftHandRig: (newLeftHandRig: THand<'Left'>) => void;
-  timeline: number;
-  setTimeline: (newTimeline: number) => void;
 }
 
 const useMainStore = create<TState>()((set) => ({
@@ -37,8 +35,6 @@ const useMainStore = create<TState>()((set) => ({
   leftHandRig: null,
   setLeftHandRig: (newLeftHandRig: THand<'Left'>) =>
     set(() => ({ leftHandRig: newLeftHandRig })),
-  timeline: 0,
-  setTimeline: (newTimeline: number) => set(() => ({ timeline: newTimeline })),
 }));
 
 export default useMainStore;

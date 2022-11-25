@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState } from 'react';
+import { useEffect } from 'react';
 import { Face, Pose, Hand, TFace, TPose, THand } from 'kalidokit';
 import {
   FACEMESH_TESSELATION,
@@ -10,8 +10,8 @@ import { Camera } from '@mediapipe/camera_utils';
 import '@mediapipe/control_utils';
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils';
 
-import useTrackingStore from '../stores/useMainStore';
-import useMainStore from '../stores/useMainStore';
+import useTrackingStore from '../stores/useCharacterStore';
+import useMainStore from '../stores/useCharacterStore';
 
 const useKalidokit = (videoElement: any, cameraRef: any) => {
   useEffect(() => {
@@ -141,8 +141,8 @@ const useKalidokit = (videoElement: any, cameraRef: any) => {
         height: 600,
       });
 
-      //turn off camera just for testing
-      //cameraRef.current.start();
+      //turn off camera just for testing remove this
+      cameraRef.current.start();
     })();
   }, [cameraRef, videoElement]);
 };

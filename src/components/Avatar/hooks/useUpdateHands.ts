@@ -1,6 +1,6 @@
 import { THand } from 'kalidokit';
 import useTransformHelpers from './useTransformHelpers';
-import useTrackingStore from '../../../stores/useMainStore';
+import useTrackingStore from '../../../stores/useCharacterStore';
 
 function useHandsTracker() {
   const { rigRotation } = useTransformHelpers();

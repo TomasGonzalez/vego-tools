@@ -3,7 +3,7 @@ import ProgressBar from './progress-bar';
 
 const MainContainer = styled.div`
   height: 100px;
-  padding: 8px 16px;
+  padding: 8px 8px;
   display: flex;
   background-color: ${(props: any) => props.theme.colors.dark};
   flex-direction: column;
