@@ -9,6 +9,8 @@ interface TAState {
   addTime: (timeDelta: number) => void;
   animationPlaying: boolean;
   setAnimationPlaying: (newPlayingValue: boolean) => void;
+  recording: boolean;
+  setRecording: (newRecordingState: boolean) => void;
 }
 
 const useAnimationStore = create<TAState>()((set, get) => ({
@@ -21,6 +23,9 @@ const useAnimationStore = create<TAState>()((set, get) => ({
   animationPlaying: false,
   setAnimationPlaying: (newPlayingValue: boolean) =>
     set(() => ({ animationPlaying: newPlayingValue })),
+  recording: false,
+  setRecording: (newRecordingState) =>
+    set(() => ({ recording: newRecordingState })),
 }));
 
 export default useAnimationStore;

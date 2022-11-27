@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Controllers from './controllers';
 import ProgressBar from './progress-bar';
 
 const MainContainer = styled.div`
@@ -9,25 +10,11 @@ const MainContainer = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-
-const ControllersDiv = styled.div`
-  background-color: ${(props: any) => props.theme.colors.dark};
-  width: 100%;
-  margin: 4px;
-  border-radius: 4px;
-  display: flex;
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
-
 function VideoTimeline() {
   return (
     <MainContainer>
       <ProgressBar />
-      <ControllersDiv>
-        <div> time O {'>'} </div>
-      </ControllersDiv>
+      <Controllers />
     </MainContainer>
   );
 }
