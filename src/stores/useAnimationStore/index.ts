@@ -15,11 +15,13 @@ interface TAState {
 
 const useAnimationStore = create<TAState>()((set, get) => ({
   timeLimit: config.maxRecordingTime,
-  step: 0.1,
+  step: 0.001,
   currentTime: 0,
   setCurrentTime: (newTime: number) => set(() => ({ currentTime: newTime })),
   addTime: (timeDelta) =>
-    set(() => ({ currentTime: timeDelta + get().currentTime })),
+    set(() => ({
+      currentTime: (timeDelta + get().currentTime) % get().timeLimit,
+    })),
   mode: 'default',
   setMode: (newMode) => set({ mode: newMode }),
 }));

@@ -49,6 +49,7 @@ function useHandleMovement(mode: string, recordingTime: RefObject<number>) {
 
         break;
 
+      case 'default':
       case 'playing':
         if (recordPoseMovement.current && recordFaceMovement.current) {
           let indexAtPercentage = 0;

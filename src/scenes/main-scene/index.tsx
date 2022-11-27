@@ -6,13 +6,9 @@ import Avatar from '../../components/avatar';
 import useAnimationStore from '../../stores/useAnimationStore';
 
 function WrappedCanvas() {
-  useFrame((state) => {
+  useFrame(({}, delta) => {
     if (useAnimationStore.getState().mode === 'playing') {
-      useAnimationStore
-        .getState()
-        .setCurrentTime(
-          state.clock.getElapsedTime() % useAnimationStore.getState().timeLimit
-        );
+      useAnimationStore.getState().addTime(delta);
     }
   });
 
@@ -37,6 +33,9 @@ function MainScene() {
       style={{
         height: '100%',
         width: '100%',
+        backgroundColor: 'white',
+        // background:
+        //    'url(https://i.pinimg.com/736x/e6/87/c6/e687c6e7dea993b7bd49c9541f5c5688.jpg)',
       }}
     >
       <WrappedCanvas />
