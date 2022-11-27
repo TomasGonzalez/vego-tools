@@ -5,6 +5,7 @@ import {
   RadioButtonOffOutline,
   RadioButtonOnOutline,
 } from 'react-ionicons';
+
 import theme from '../../../../theme';
 import useAnimationStore from '../../../stores/useAnimationStore';
 
@@ -27,31 +28,36 @@ const InnerDivWrapper = styled.div`
 `;
 
 function Controllers() {
-  const animationPlaying = useAnimationStore((store) => store.animationPlaying);
-  const recording = useAnimationStore((store) => store.recording);
+  const mode = useAnimationStore((store) => store.mode);
+  const setMode = useAnimationStore((store) => store.setMode);
+
   return (
     <ControllersDiv>
       <InnerDivWrapper>
-        {!recording ? (
-          <RadioButtonOffOutline
-            color={theme.colors.primary}
-            style={{ verticalAlign: 'middle', cursor: 'pointer' }}
-          />
-        ) : (
+        {mode === 'recording' ? (
           <RadioButtonOnOutline
             color={theme.colors.primary}
             style={{ verticalAlign: 'middle', cursor: 'pointer' }}
-          />
-        )}
-        {!animationPlaying ? (
-          <PlayOutline
-            color={theme.colors.primary}
-            style={{ verticalAlign: 'middle', cursor: 'pointer' }}
+            onClick={() => setMode('default')}
           />
         ) : (
+          <RadioButtonOffOutline
+            color={theme.colors.primary}
+            style={{ verticalAlign: 'middle', cursor: 'pointer' }}
+            onClick={() => setMode('recording')}
+          />
+        )}
+        {mode === 'playing' ? (
           <PauseOutline
             color={theme.colors.primary}
             style={{ verticalAlign: 'middle', cursor: 'pointer' }}
+            onClick={() => setMode('default')}
+          />
+        ) : (
+          <PlayOutline
+            color={theme.colors.primary}
+            style={{ verticalAlign: 'middle', cursor: 'pointer' }}
+            onClick={() => setMode('playing')}
           />
         )}
       </InnerDivWrapper>

@@ -7,7 +7,7 @@ import useAnimationStore from '../../stores/useAnimationStore';
 
 function WrappedCanvas() {
   useFrame((state) => {
-    if (useAnimationStore.getState().animationPlaying) {
+    if (useAnimationStore.getState().mode === 'playing') {
       useAnimationStore
         .getState()
         .setCurrentTime(

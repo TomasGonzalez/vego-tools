@@ -28,7 +28,7 @@ function useHandleMovement(mode: string, recordingTime: RefObject<number>) {
 
   useFrame(() => {
     switch (mode) {
-      case 'record':
+      case 'recording':
         if (riggedPose) {
           recordPoseMovement.current.push(riggedPose);
           applyPose(riggedPose);
@@ -49,7 +49,7 @@ function useHandleMovement(mode: string, recordingTime: RefObject<number>) {
 
         break;
 
-      case 'play':
+      case 'playing':
         if (recordPoseMovement.current && recordFaceMovement.current) {
           let indexAtPercentage = 0;
 

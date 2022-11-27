@@ -2,6 +2,8 @@ import useAnimationStore from '../../../stores/useAnimationStore';
 import styled from 'styled-components';
 
 function ProgressBar() {
+  const currentTime = useAnimationStore((store) => store.currentTime);
+
   return (
     <ProgressBarDiv>
       <InputRangeContainer
@@ -9,6 +11,7 @@ function ProgressBar() {
         onInput={(e: any) =>
           useAnimationStore.getState().setCurrentTime(parseInt(e.target.value))
         }
+        value={currentTime}
         min={0}
         step={useAnimationStore.getState().step}
         max={useAnimationStore.getState().timeLimit}

@@ -1,16 +1,16 @@
 import create from 'zustand';
 import config from '../../constants/config';
 
+type TMode = 'default' | 'recording' | 'playing';
+
 interface TAState {
   timeLimit: number;
   step: number;
   currentTime: number;
   setCurrentTime: (newTime: number) => void;
   addTime: (timeDelta: number) => void;
-  animationPlaying: boolean;
-  setAnimationPlaying: (newPlayingValue: boolean) => void;
-  recording: boolean;
-  setRecording: (newRecordingState: boolean) => void;
+  mode: TMode;
+  setMode: (newMode: TMode) => void;
 }
 
 const useAnimationStore = create<TAState>()((set, get) => ({
@@ -20,12 +20,8 @@ const useAnimationStore = create<TAState>()((set, get) => ({
   setCurrentTime: (newTime: number) => set(() => ({ currentTime: newTime })),
   addTime: (timeDelta) =>
     set(() => ({ currentTime: timeDelta + get().currentTime })),
-  animationPlaying: false,
-  setAnimationPlaying: (newPlayingValue: boolean) =>
-    set(() => ({ animationPlaying: newPlayingValue })),
-  recording: false,
-  setRecording: (newRecordingState) =>
-    set(() => ({ recording: newRecordingState })),
+  mode: 'default',
+  setMode: (newMode) => set({ mode: newMode }),
 }));
 
 export default useAnimationStore;
