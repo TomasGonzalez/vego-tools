@@ -28,6 +28,7 @@ const Avatar = ({ modelUrl }: { modelUrl: string }) => {
   useEffect(() => {
     switch (mode) {
       case 'recording':
+        useAnimationStore.getState().setCurrentTime(recordingTime.current);
         clock.current.start();
         break;
       case 'playing':
@@ -43,6 +44,8 @@ const Avatar = ({ modelUrl }: { modelUrl: string }) => {
   useHandleMovement(mode, recordingTime);
 
   useFrame(({}, delta) => {
+    if (useAnimationStore.getState().mode === 'recording')
+      useAnimationStore.getState().addTime(clock.current.getDelta());
     avatar?.update(delta);
   });
 
