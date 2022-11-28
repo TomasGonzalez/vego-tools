@@ -10,12 +10,12 @@ import { Camera } from '@mediapipe/camera_utils';
 import '@mediapipe/control_utils';
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils';
 
-import useTrackingStore from '../stores/useCharacterStore';
-import useMainStore from '../stores/useCharacterStore';
+import useCharacterStore from '../stores/useCharacterStore';
+import useAnimationStore from '../stores/useAnimationStore';
 
 const useKalidokit = (videoElement: any, cameraRef: any) => {
   useEffect(() => {
-    if (!useMainStore.getState().holistic) {
+    if (!useCharacterStore.getState().holistic) {
       const holistic = new Holistic({
         locateFile: (file) => {
           return `https://cdn.jsdelivr.net/npm/@mediapipe/holistic@0.5.1635989137/${file}`;
@@ -30,10 +30,10 @@ const useKalidokit = (videoElement: any, cameraRef: any) => {
         refineFaceLandmarks: true,
       });
 
-      useMainStore.getState().setHolistic(holistic);
+      useCharacterStore.getState().setHolistic(holistic);
     }
 
-    useMainStore.getState().holistic?.onResults((results: any) => {
+    useCharacterStore.getState().holistic?.onResults((results: any) => {
       const guideCanvas: any = document.getElementById('guides');
       guideCanvas.width = videoElement?.current?.videoWidth;
       guideCanvas.height = videoElement?.current?.videoHeight;
@@ -103,7 +103,7 @@ const useKalidokit = (videoElement: any, cameraRef: any) => {
       const rightHandlm = results.leftHandLandmarks;
 
       if (facelm) {
-        useTrackingStore.getState().setFaceRig(
+        useCharacterStore.getState().setFaceRig(
           Face.solve(facelm, {
             runtime: 'mediapipe',
             video: videoElement.current,
@@ -112,7 +112,7 @@ const useKalidokit = (videoElement: any, cameraRef: any) => {
       }
 
       if (poselm3D && poselm)
-        useTrackingStore.getState().setPoseRig(
+        useCharacterStore.getState().setPoseRig(
           Pose.solve(poselm3D, poselm, {
             runtime: 'mediapipe',
             video: videoElement.current,
@@ -120,12 +120,12 @@ const useKalidokit = (videoElement: any, cameraRef: any) => {
         );
 
       if (rightHandlm)
-        useTrackingStore
+        useCharacterStore
           .getState()
           .setRightHandRig(Hand.solve(rightHandlm, 'Right') as THand<'Right'>);
 
       if (leftHandlm)
-        useTrackingStore
+        useCharacterStore
           .getState()
           .setLeftHandRig(Hand.solve(leftHandlm, 'Left') as THand<'Left'>);
     });
@@ -133,7 +133,9 @@ const useKalidokit = (videoElement: any, cameraRef: any) => {
     (async function initCamara() {
       cameraRef.current = new Camera(videoElement.current, {
         onFrame: async () => {
-          return await useMainStore
+          if (useAnimationStore.getState().mode !== 'recording') return;
+
+          return await useCharacterStore
             .getState()
             .holistic?.send({ image: videoElement.current });
         },

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -17,27 +17,28 @@ const Avatar = ({ modelUrl }: { modelUrl: string }) => {
   const loader = useRef(new GLTFLoader());
   const mode = useAnimationStore((store) => store.mode);
 
-  //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv <- that could be it's own hook
-  // Each avatar must have its own clock in order to know how many seconds of recording it has
+  /*
+   * Each avatar must have its own clock,
+   * in order to track the recording time.
+   */
 
   const clock = useRef(new Clock(false));
   const recordingTime = useRef(0);
 
   useEffect(() => {
     switch (mode) {
-      case 'playing':
+      case 'recording':
         clock.current.start();
         break;
-      case 'recording':
+      case 'playing':
       case 'default':
-        recordingTime.current += clock.current.getElapsedTime();
-        clock.current.stop();
+        if (clock.current.running) {
+          recordingTime.current += clock.current.getElapsedTime();
+          clock.current.stop();
+        }
         break;
     }
   }, [mode]);
-
-  //^^^^^^^^^^^^^^^^^^^^^
-  //Avatar movement recorder
 
   useHandleMovement(mode, recordingTime);
 

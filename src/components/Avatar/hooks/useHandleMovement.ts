@@ -29,21 +29,16 @@ function useHandleMovement(mode: string, recordingTime: RefObject<number>) {
   useFrame(() => {
     switch (mode) {
       case 'recording':
-        if (riggedPose) {
-          recordPoseMovement.current.push(riggedPose);
-          applyPose(riggedPose);
-        }
+        recordPoseMovement.current.push(riggedPose);
 
-        if (riggedFace) {
-          recordFaceMovement.current.push(riggedFace);
-          applyFace(riggedFace);
-        }
+        if (riggedPose) applyPose(riggedPose);
 
-        if (riggedRightHandRig)
-          recordRightHandMovement.current.push(riggedRightHandRig);
+        recordFaceMovement.current.push(riggedFace);
 
-        if (riggedLeftHandRig)
-          recordLeftHandMovement.current.push(riggedLeftHandRig);
+        if (riggedFace) applyFace(riggedFace);
+
+        recordRightHandMovement.current.push(riggedRightHandRig);
+        recordLeftHandMovement.current.push(riggedLeftHandRig);
 
         applyHands(riggedLeftHandRig, riggedRightHandRig);
 
@@ -56,7 +51,7 @@ function useHandleMovement(mode: string, recordingTime: RefObject<number>) {
 
           if (
             recordingTime.current &&
-            recordingTime.current <= config.maxRecordingTime
+            recordingTime.current <= useAnimationStore.getState().timeLimit
           ) {
             indexAtPercentage = Math.round(
               ((recordPoseMovement.current.length - 1) *

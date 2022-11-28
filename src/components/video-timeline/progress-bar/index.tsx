@@ -16,9 +16,21 @@ function ProgressBar() {
         step={useAnimationStore.getState().step}
         max={useAnimationStore.getState().timeLimit}
       />
+      <AnimationGridDivWrapper>
+        <div className='grid-item'>1</div>
+        <div className='grid-item'>2</div>
+        <div className='grid-item'>3</div>
+        <div className='grid-item'>4</div>
+      </AnimationGridDivWrapper>
     </ProgressBarDiv>
   );
 }
+
+const AnimationGridDivWrapper = styled.div`
+  width: 100%;
+  display: grid;
+  position: absolute;
+`;
 
 const ProgressBarDiv = styled.div`
   background-color: ${(props: any) => props.theme.colors.third};
