@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useRef } from 'react';
+import { Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 
@@ -7,7 +7,7 @@ import useAnimationStore from '../../stores/useAnimationStore';
 import useRenderSceneToVideo from '../../hooks/useRenderSceneToVideo';
 
 function WrappedCanvas() {
-  // Manage timeline
+  // Animate timeline on playing
   useFrame(({}, delta) => {
     if (useAnimationStore.getState().mode === 'playing') {
       useAnimationStore.getState().addTime(delta);

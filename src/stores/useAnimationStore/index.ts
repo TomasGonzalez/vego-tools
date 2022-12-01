@@ -1,7 +1,7 @@
 import create from 'zustand';
 import config from '../../constants/config';
 
-type TMode = 'default' | 'recording' | 'playing';
+type TMode = 'default' | 'recording' | 'playing' | 'rendering';
 
 interface TAState {
   timeLimit: number;
