@@ -8,6 +8,7 @@ import MainScene from './scenes/main-scene';
 
 function App() {
   const { videoElement } = useVCaptureLogic();
+
   return (
     <MainContainer>
       <ThemeProvider theme={theme}>

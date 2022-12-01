@@ -4,8 +4,10 @@ import { OrbitControls } from '@react-three/drei';
 
 import Avatar from '../../components/avatar';
 import useAnimationStore from '../../stores/useAnimationStore';
+import useRenderSceneToVideo from '../../hooks/useRenderSceneToVideo';
 
 function WrappedCanvas() {
+  // Manage timeline
   useFrame(({}, delta) => {
     if (useAnimationStore.getState().mode === 'playing') {
       useAnimationStore.getState().addTime(delta);
@@ -24,8 +26,11 @@ function WrappedCanvas() {
 }
 
 function MainScene() {
+  const { canvasRef } = useRenderSceneToVideo();
+
   return (
     <Canvas
+      ref={canvasRef}
       onCreated={({ camera }) => {
         camera.position.y = 2;
         camera.updateProjectionMatrix();
