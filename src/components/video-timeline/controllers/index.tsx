@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import {
+  ImageOutline,
   PauseOutline,
   PlayOutline,
   RadioButtonOffOutline,
@@ -24,7 +25,35 @@ const InnerDivWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 60px;
+  width: 100px;
+`;
+
+const Spinner = styled.div`
+  border-radius: 10px;
+  height: 10px;
+  width: 10px;
+  border: 3px solid ${(props) => props.theme.colors.third}; /* Light grey */
+  border-top: 3px solid ${(props) => props.theme.colors.primary}; /* Blue */
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+
+  @-webkit-keyframes spin {
+    0% {
+      -webkit-transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 `;
 
 function Controllers() {
@@ -47,6 +76,7 @@ function Controllers() {
             onClick={() => setMode('recording')}
           />
         )}
+
         {mode === 'playing' ? (
           <PauseOutline
             color={theme.colors.primary}
@@ -58,6 +88,16 @@ function Controllers() {
             color={theme.colors.primary}
             style={{ verticalAlign: 'middle', cursor: 'pointer' }}
             onClick={() => setMode('playing')}
+          />
+        )}
+
+        {mode === 'rendering' ? (
+          <Spinner />
+        ) : (
+          <ImageOutline
+            color={theme.colors.primary}
+            style={{ verticalAlign: 'middle', cursor: 'pointer' }}
+            onClick={() => setMode('rendering')}
           />
         )}
       </InnerDivWrapper>

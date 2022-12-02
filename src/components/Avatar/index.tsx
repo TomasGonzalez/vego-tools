@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -23,18 +23,28 @@ const Avatar = ({ modelUrl }: { modelUrl: string }) => {
    */
 
   const clock = useRef(new Clock(false));
-  const recordingTime = useRef(0);
+
+  const [recordingTime, setRecordingTime] = useState(0);
+
+  useEffect(() => {
+    if (useAnimationStore.getState().animationTimeLimit < recordingTime) {
+      useAnimationStore.getState().setAnimationTimeLimit(recordingTime);
+    }
+  }, [recordingTime]);
 
   useEffect(() => {
     switch (mode) {
       case 'recording':
-        useAnimationStore.getState().setCurrentTime(recordingTime.current);
+        useAnimationStore.getState().setCurrentTime(recordingTime);
         clock.current.start();
         break;
       case 'playing':
       case 'default':
+        //Add the recording time and stop the clock when recordingStops
         if (clock.current.running) {
-          recordingTime.current += clock.current.getElapsedTime();
+          setRecordingTime(
+            (_recordingTime) => clock.current.getElapsedTime() + _recordingTime
+          );
           clock.current.stop();
         }
         break;

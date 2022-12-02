@@ -9,7 +9,7 @@ import useFaceTracker from './useUpdateFace';
 import useHandsTracker from './useUpdateHands';
 import usePoseTracker from './useUpdatePose';
 
-function useHandleMovement(mode: string, recordingTime: RefObject<number>) {
+function useHandleMovement(mode: string, recordingTime: number) {
   const riggedPose = useMainStore(({ poseRig }) => poseRig);
   const riggedFace = useMainStore(({ faceRig }) => faceRig);
   const riggedLeftHandRig = useMainStore(({ leftHandRig }) => leftHandRig);
@@ -44,19 +44,21 @@ function useHandleMovement(mode: string, recordingTime: RefObject<number>) {
 
         break;
 
+      // Move avatar to match timeline recording if not recording
       case 'default':
+      case 'rendering':
       case 'playing':
         if (recordPoseMovement.current && recordFaceMovement.current) {
           let indexAtPercentage = 0;
 
           if (
-            recordingTime.current &&
-            recordingTime.current <= useAnimationStore.getState().timeLimit
+            recordingTime &&
+            recordingTime <= useAnimationStore.getState().timeLimit
           ) {
             indexAtPercentage = Math.round(
               ((recordPoseMovement.current.length - 1) *
                 useAnimationStore.getState().currentTime) /
-                recordingTime.current // Amount of recording time for this object
+                recordingTime // Amount of recording time for this object
             );
           }
 

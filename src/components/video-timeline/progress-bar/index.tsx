@@ -12,9 +12,9 @@ function ProgressBar() {
           useAnimationStore.getState().setCurrentTime(parseInt(e.target.value))
         }
         value={currentTime}
-        min={0}
-        step={useAnimationStore.getState().step}
-        max={useAnimationStore.getState().timeLimit}
+        step='0.01'
+        min={'0'}
+        max={`${useAnimationStore.getState().timeLimit}`}
       />
     </ProgressBarDiv>
   );
