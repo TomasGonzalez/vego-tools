@@ -16,29 +16,50 @@ function useRenderScene() {
         mode === 'rendering' &&
         mediaRecorderObject?.current?.state !== 'recording'
       ) {
+        const renderChunks: any[] | undefined = [];
         canvasStream.current = canvasRef.current.captureStream();
-        mediaRecorderObject.current = new MediaRecorder(canvasStream.current);
+
+        mediaRecorderObject.current = new MediaRecorder(canvasStream.current, {
+          mimeType: 'video/webm',
+        });
+
+        // Save the recordings to this array
+        mediaRecorderObject.current.ondataavailable = (e: any) => {
+          console.log('adding new data', e.data);
+          renderChunks.push(e.data);
+        };
+
+        mediaRecorderObject.current.onstop = () => {
+          console.log('is on stop running');
+          const fullBlob = new Blob(renderChunks, { type: 'video/webm' });
+          const downloadUrl = window.URL.createObjectURL(fullBlob);
+          console.log({ fullBlob });
+          console.log({ downloadUrl });
+        };
 
         // Start rendering by changing the canvas frame by frame and copturing it
-
         mediaRecorderObject.current.onstart = () => {
-          console.log('setting current time');
+          console.log('is start running');
+
           setCurrentTime(0);
+          console.log('is start continuin');
+
           while (
             useAnimationStore.getState().currentTime <
             useAnimationStore.getState().animationTimeLimit
           ) {
-            console.log(
-              'current time',
-              useAnimationStore.getState().currentTime
-            );
             useAnimationStore.getState().setTimeNextFrame();
+            mediaRecorderObject.current.requestData();
+            console.log('added frame');
           }
+
           setMode('default');
         };
 
         mediaRecorderObject.current.start();
       } else if (mediaRecorderObject?.current?.state === 'recording') {
+        console.log('called stop');
+
         mediaRecorderObject.current.stop();
       }
     }
