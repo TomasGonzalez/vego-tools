@@ -38,18 +38,17 @@ function useRenderScene() {
         };
 
         // Start rendering by changing the canvas frame by frame and copturing it
-        mediaRecorderObject.current.onstart = () => {
-          console.log('is start running');
-
+        mediaRecorderObject.current.onstart = async () => {
           setCurrentTime(0);
-          console.log('is start continuin');
 
           while (
             useAnimationStore.getState().currentTime <
             useAnimationStore.getState().animationTimeLimit
           ) {
             useAnimationStore.getState().setTimeNextFrame();
-            mediaRecorderObject.current.requestData();
+
+            // I need to find a way to wayt until the canvas is updated without relying on an arbitrary time wait
+            await new Promise((resolve) => setTimeout(resolve, 100));
             console.log('added frame');
           }
 

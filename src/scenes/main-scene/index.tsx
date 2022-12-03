@@ -1,12 +1,17 @@
-import { Suspense } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Suspense, useEffect } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 
 import Avatar from '../../components/avatar';
 import useAnimationStore from '../../stores/useAnimationStore';
 import useRenderSceneToVideo from '../../hooks/useRenderSceneToVideo';
+import { Color } from 'three';
 
 function WrappedCanvas() {
+  const { scene } = useThree();
+  useEffect(() => {
+    scene.background = new Color('#fff');
+  }, []);
   // Animate timeline on playing
   useFrame(({}, delta) => {
     if (useAnimationStore.getState().mode === 'playing') {
@@ -38,7 +43,7 @@ function MainScene() {
       style={{
         height: '100%',
         width: '100%',
-        backgroundColor: 'white',
+        // backgroundColor: 'white',
         // background:
         //    'url(https://i.pinimg.com/736x/e6/87/c6/e687c6e7dea993b7bd49c9541f5c5688.jpg)',
       }}

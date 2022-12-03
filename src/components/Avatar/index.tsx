@@ -19,7 +19,7 @@ const Avatar = ({ modelUrl }: { modelUrl: string }) => {
 
   /*
    * Each avatar must have its own clock,
-   * in order to track the recording time.
+   * in order to track its current recording time.
    */
 
   const clock = useRef(new Clock(false));
