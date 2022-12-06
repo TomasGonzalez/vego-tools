@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Controllers from './controllers';
+import NewProgressBar from './new-progress-bar';
 import ProgressBar from './progress-bar';
 
 const MainContainer = styled.div`
@@ -10,9 +11,11 @@ const MainContainer = styled.div`
   flex-direction: column;
   align-items: center;
 `;
+
 function VideoTimeline() {
   return (
     <MainContainer>
+      <NewProgressBar />
       <ProgressBar />
       <Controllers />
     </MainContainer>
