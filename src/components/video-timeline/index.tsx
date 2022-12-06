@@ -16,7 +16,7 @@ function VideoTimeline() {
   return (
     <MainContainer>
       <NewProgressBar />
-      <ProgressBar />
+      {/* <ProgressBar /> */}
       <Controllers />
     </MainContainer>
   );

@@ -15,20 +15,28 @@ function NewProgressBar() {
   }, [max, min]);
 
   return (
-    <MainWrapper>
-      <div>0</div>
+    <MainWrapper
+      onMouseDownCapture={(e) => console.log(e.movementX)}
+      onWheel={(e) => {
+        console.log(e);
+        setMaxValue((value) => e.deltaY + value);
+      }}
+    >
       {calculateIntervals.map((value) => {
         return <div>{value.toFixed(2)}</div>;
       })}
-      <div>1</div>
     </MainWrapper>
   );
 }
 
 const MainWrapper = styled.div`
+  overflow: hidden;
   display: flex;
   justify-content: space-between;
+  height: 80px;
   width: 100%;
+  border: 1px solid red;
+  cursor: pointer;
 `;
 
 export default NewProgressBar;
