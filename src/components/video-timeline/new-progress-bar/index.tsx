@@ -3,6 +3,10 @@ import styled from 'styled-components';
 
 import useAnimationStore from '../../../stores/useAnimationStore';
 
+enum Buttons {
+  LClick = 1,
+}
+
 function NewProgressBar() {
   const timeLimit = useAnimationStore((store) => store.timeLimit);
   const currentTime = useAnimationStore((store) => store.currentTime);

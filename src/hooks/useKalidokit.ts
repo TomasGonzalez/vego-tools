@@ -14,6 +14,7 @@ import useCharacterStore from '../stores/useCharacterStore';
 import useAnimationStore from '../stores/useAnimationStore';
 
 const useKalidokit = (videoElement: any, cameraRef: any) => {
+  const mode = useAnimationStore((state) => state.mode);
   useEffect(() => {
     if (!useCharacterStore.getState().holistic) {
       const holistic = new Holistic({
@@ -142,11 +143,16 @@ const useKalidokit = (videoElement: any, cameraRef: any) => {
         width: 900,
         height: 600,
       });
-
-      //turn off camera just for testing remove this
-      cameraRef.current.start();
     })();
   }, [cameraRef, videoElement]);
+
+  useEffect(() => {
+    if (mode === 'recording') {
+      cameraRef?.current?.start();
+    } else {
+      cameraRef?.current?.stop();
+    }
+  }, [mode]);
 };
 
 export default useKalidokit;
