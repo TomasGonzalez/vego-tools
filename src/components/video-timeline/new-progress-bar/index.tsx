@@ -1,9 +1,16 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 
+import useAnimationStore from '../../../stores/useAnimationStore';
+
 function NewProgressBar() {
+  const timeLimit = useAnimationStore((store) => store.timeLimit);
+  const currentTime = useAnimationStore((store) => store.currentTime);
+  const setCurrentTime = useAnimationStore((store) => store.setCurrentTime);
+  const [max, setMaxValue] = useState(timeLimit);
   const [min, setMinValue] = useState(0);
-  const [max, setMaxValue] = useState(1);
+  const positionDelta = useRef(0);
+  const timelineContaienrRef = useRef<any>(null);
 
   const calculateIntervals = useMemo(() => {
     const increment = (max - min) / 10;
@@ -14,28 +21,68 @@ function NewProgressBar() {
     );
   }, [max, min]);
 
+  const mouseMove = useCallback((e: any) => {
+    const { clientX } = e;
+    if (e.buttons === 1) {
+      const rect = timelineContaienrRef?.current?.getBoundingClientRect();
+
+      // Calculate the position of the mouse relative to the element
+      const x = clientX - rect.left;
+
+      positionDelta.current = x / timelineContaienrRef.current.offsetWidth;
+
+      setCurrentTime(positionDelta.current * max);
+    }
+  }, []);
+
+  const wheel = useCallback((e: any) => {
+    setMaxValue((value) => e.deltaY + value);
+  }, []);
+
   return (
-    <MainWrapper
-      onMouseDownCapture={(e) => console.log(e.movementX)}
-      onWheel={(e) => {
-        console.log(e);
-        setMaxValue((value) => e.deltaY + value);
-      }}
-    >
-      {calculateIntervals.map((value) => {
-        return <div>{value.toFixed(2)}</div>;
-      })}
-    </MainWrapper>
+    <div style={{ width: '100%' }}>
+      <NumbersContainer>
+        {calculateIntervals.map((value) => (
+          <NumericPointers key={value}>{value.toFixed(2)}</NumericPointers>
+        ))}
+      </NumbersContainer>
+      <MainWrapper
+        ref={timelineContaienrRef}
+        onMouseMove={mouseMove}
+        // onWheel={wheel}
+      >
+        <CursorMarker positionDelta={currentTime / max} />
+      </MainWrapper>
+    </div>
   );
 }
 
-const MainWrapper = styled.div`
-  overflow: hidden;
+const NumbersContainer = styled.div`
+  background-color: ${(props) => props.theme.colors.third};
   display: flex;
   justify-content: space-between;
-  height: 80px;
+`;
+
+const NumericPointers = styled.div`
+  font-size: 12px;
+  user-select: none;
+  z-index: 1;
+`;
+
+const CursorMarker = styled.div<any>`
+  background-color: ${(props) => props.theme.colors.primary};
+  height: 100%;
+  width: 1px;
+  left: ${(props) => props.positionDelta * 100}%;
+  position: absolute;
+`;
+
+const MainWrapper = styled.div`
+  position: relative;
+  overflow: hidden;
+  height: 40px;
   width: 100%;
-  border: 1px solid red;
+  background-color: ${(props) => props.theme.colors.secondary};
   cursor: pointer;
 `;
 
