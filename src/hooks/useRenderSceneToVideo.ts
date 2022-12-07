@@ -43,7 +43,7 @@ function useRenderScene() {
 
           while (
             useAnimationStore.getState().currentTime <
-            useAnimationStore.getState().animationTimeLimit
+            useAnimationStore.getState().animationRecordTime
           ) {
             useAnimationStore.getState().setTimeNextFrame();
 

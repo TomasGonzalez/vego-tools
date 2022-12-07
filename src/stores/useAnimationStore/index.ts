@@ -8,8 +8,8 @@ interface TAState {
   step: number;
   currentTime: number;
   setCurrentTime: (newTime: number) => void;
-  animationTimeLimit: number;
-  setAnimationTimeLimit: (newATLimit: number) => void;
+  animationRecordTime: number;
+  setAnimationRecordTime: (newATLimit: number) => void;
   setTimeNextFrame: () => void;
   addTime: (timeDelta: number) => void;
   mode: TMode;
@@ -20,9 +20,9 @@ const useAnimationStore = create<TAState>()((set, get) => ({
   timeLimit: config.maxRecordingTime,
   step: 0.001,
   currentTime: 0,
-  animationTimeLimit: 0,
-  setAnimationTimeLimit: (newATLimit) =>
-    set(() => ({ animationTimeLimit: newATLimit })),
+  animationRecordTime: 0,
+  setAnimationRecordTime: (newATLimit) =>
+    set(() => ({ animationRecordTime: newATLimit })),
   setCurrentTime: (newTime: number) => set(() => ({ currentTime: newTime })),
   setTimeNextFrame: () =>
     set(() => ({ currentTime: get().currentTime + config.renderFPS })),

@@ -27,8 +27,8 @@ const Avatar = ({ modelUrl }: { modelUrl: string }) => {
   const [recordingTime, setRecordingTime] = useState(0);
 
   useEffect(() => {
-    if (useAnimationStore.getState().animationTimeLimit < recordingTime) {
-      useAnimationStore.getState().setAnimationTimeLimit(recordingTime);
+    if (useAnimationStore.getState().animationRecordTime < recordingTime) {
+      useAnimationStore.getState().setAnimationRecordTime(recordingTime);
     }
   }, [recordingTime]);
 
