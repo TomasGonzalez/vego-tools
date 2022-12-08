@@ -1,10 +1,9 @@
 import styled from 'styled-components';
 import Controllers from './controllers';
 import NewProgressBar from './new-progress-bar';
-import ProgressBar from './progress-bar';
 
 const MainContainer = styled.div`
-  height: 100px;
+  height: 112px;
   padding: 8px 8px;
   display: flex;
   background-color: ${(props: any) => props.theme.colors.dark};
@@ -16,7 +15,6 @@ function VideoTimeline() {
   return (
     <MainContainer>
       <NewProgressBar />
-      {/* <ProgressBar /> */}
       <Controllers />
     </MainContainer>
   );

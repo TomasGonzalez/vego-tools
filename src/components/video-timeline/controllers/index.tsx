@@ -19,20 +19,18 @@ function Controllers() {
       <InnerDivWrapper>
         <IconContaier
           onClick={() =>
-            setMode(mode === 'recording' ? 'default' : 'recording')
+            setMode(mode === 'recording' ? 'default' : 'preparing')
           }
         >
           {mode === 'recording' ? (
             <RadioButtonOnOutline
               color={theme.colors.primary}
               style={{ verticalAlign: 'middle', cursor: 'pointer' }}
-              onClick={() => setMode('default')}
             />
           ) : (
             <RadioButtonOffOutline
               color={theme.colors.primary}
               style={{ verticalAlign: 'middle', cursor: 'pointer' }}
-              onClick={() => setMode('recording')}
             />
           )}
         </IconContaier>
@@ -52,6 +50,7 @@ function Controllers() {
             />
           )}
         </IconContaier>
+
         <IconContaier
           disabled={mode === 'rendering'}
           onClick={() => setMode('rendering')}
