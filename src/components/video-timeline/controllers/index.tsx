@@ -9,6 +9,7 @@ import {
 
 import theme from '../../../../theme';
 import useAnimationStore from '../../../stores/useAnimationStore';
+import Spinner from '../../spinner';
 
 function Controllers() {
   const mode = useAnimationStore((store) => store.mode);
@@ -99,34 +100,6 @@ const InnerDivWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100px;
-`;
-
-const Spinner = styled.div`
-  border-radius: 10px;
-  height: 10px;
-  width: 10px;
-  border: 3px solid ${(props) => props.theme.colors.third}; /* Light grey */
-  border-top: 3px solid ${(props) => props.theme.colors.primary}; /* Blue */
-  -webkit-animation: spin 2s linear infinite;
-  animation: spin 2s linear infinite;
-
-  @-webkit-keyframes spin {
-    0% {
-      -webkit-transform: rotate(0deg);
-    }
-    100% {
-      -webkit-transform: rotate(360deg);
-    }
-  }
-
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
 `;
 
 export default Controllers;
