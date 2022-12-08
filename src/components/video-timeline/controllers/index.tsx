@@ -10,6 +10,80 @@ import {
 import theme from '../../../../theme';
 import useAnimationStore from '../../../stores/useAnimationStore';
 
+function Controllers() {
+  const mode = useAnimationStore((store) => store.mode);
+  const setMode = useAnimationStore((store) => store.setMode);
+
+  return (
+    <ControllersDiv>
+      <InnerDivWrapper>
+        <IconContaier
+          onClick={() =>
+            setMode(mode === 'recording' ? 'default' : 'recording')
+          }
+        >
+          {mode === 'recording' ? (
+            <RadioButtonOnOutline
+              color={theme.colors.primary}
+              style={{ verticalAlign: 'middle', cursor: 'pointer' }}
+              onClick={() => setMode('default')}
+            />
+          ) : (
+            <RadioButtonOffOutline
+              color={theme.colors.primary}
+              style={{ verticalAlign: 'middle', cursor: 'pointer' }}
+              onClick={() => setMode('recording')}
+            />
+          )}
+        </IconContaier>
+
+        <IconContaier
+          onClick={() => setMode(mode === 'playing' ? 'default' : 'playing')}
+        >
+          {mode === 'playing' ? (
+            <PauseOutline
+              color={theme.colors.primary}
+              style={{ verticalAlign: 'middle', cursor: 'pointer' }}
+            />
+          ) : (
+            <PlayOutline
+              color={theme.colors.primary}
+              style={{ verticalAlign: 'middle', cursor: 'pointer' }}
+            />
+          )}
+        </IconContaier>
+        <IconContaier
+          disabled={mode === 'rendering'}
+          onClick={() => setMode('rendering')}
+        >
+          {mode === 'rendering' ? (
+            <Spinner />
+          ) : (
+            <ImageOutline
+              color={theme.colors.primary}
+              style={{ verticalAlign: 'middle', cursor: 'pointer' }}
+            />
+          )}
+        </IconContaier>
+      </InnerDivWrapper>
+    </ControllersDiv>
+  );
+}
+
+const IconContaier = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  border-radius: 4px;
+  padding: 0px;
+  margin: 0px;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.secondary};
+  }
+`;
+
 const ControllersDiv = styled.div`
   background-color: ${(props: any) => props.theme.colors.dark};
   width: 100%;
@@ -55,54 +129,5 @@ const Spinner = styled.div`
     }
   }
 `;
-
-function Controllers() {
-  const mode = useAnimationStore((store) => store.mode);
-  const setMode = useAnimationStore((store) => store.setMode);
-
-  return (
-    <ControllersDiv>
-      <InnerDivWrapper>
-        {mode === 'recording' ? (
-          <RadioButtonOnOutline
-            color={theme.colors.primary}
-            style={{ verticalAlign: 'middle', cursor: 'pointer' }}
-            onClick={() => setMode('default')}
-          />
-        ) : (
-          <RadioButtonOffOutline
-            color={theme.colors.primary}
-            style={{ verticalAlign: 'middle', cursor: 'pointer' }}
-            onClick={() => setMode('recording')}
-          />
-        )}
-
-        {mode === 'playing' ? (
-          <PauseOutline
-            color={theme.colors.primary}
-            style={{ verticalAlign: 'middle', cursor: 'pointer' }}
-            onClick={() => setMode('default')}
-          />
-        ) : (
-          <PlayOutline
-            color={theme.colors.primary}
-            style={{ verticalAlign: 'middle', cursor: 'pointer' }}
-            onClick={() => setMode('playing')}
-          />
-        )}
-
-        {mode === 'rendering' ? (
-          <Spinner />
-        ) : (
-          <ImageOutline
-            color={theme.colors.primary}
-            style={{ verticalAlign: 'middle', cursor: 'pointer' }}
-            onClick={() => setMode('rendering')}
-          />
-        )}
-      </InnerDivWrapper>
-    </ControllersDiv>
-  );
-}
 
 export default Controllers;

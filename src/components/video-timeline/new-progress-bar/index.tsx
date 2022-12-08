@@ -31,7 +31,7 @@ function NewProgressBar() {
 
   const mouseMove = useCallback((e: any) => {
     const { clientX } = e;
-    if (e.buttons === 1) {
+    if (e.buttons === Buttons.LClick) {
       const rect = timelineContaienrRef?.current?.getBoundingClientRect();
 
       // Calculate the position of the mouse relative to the element

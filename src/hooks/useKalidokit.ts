@@ -147,11 +147,10 @@ const useKalidokit = (videoElement: any, cameraRef: any) => {
   }, [cameraRef, videoElement]);
 
   useEffect(() => {
-    if (mode === 'recording') {
-      cameraRef?.current?.start();
-    } else {
-      cameraRef?.current?.stop();
-    }
+    (() =>
+      mode === 'recording'
+        ? cameraRef?.current?.start()
+        : cameraRef?.current?.stop())();
   }, [mode]);
 };
 
