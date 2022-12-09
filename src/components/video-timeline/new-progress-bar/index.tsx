@@ -29,17 +29,21 @@ function NewProgressBar() {
     );
   }, [max, min]);
 
-  const mouseMove = useCallback((e: any) => {
+  const calculatePositionOfCursor = useCallback((e: any) => {
     const { clientX } = e;
+    const rect = timelineContaienrRef?.current?.getBoundingClientRect();
+
+    // Calculate the position of the mouse relative to the element
+    const x = clientX - rect.left;
+
+    positionDelta.current = x / timelineContaienrRef.current.offsetWidth;
+
+    setCurrentTime(positionDelta.current * max);
+  }, []);
+
+  const mouseMove = useCallback((e: any) => {
     if (e.buttons === Buttons.LClick) {
-      const rect = timelineContaienrRef?.current?.getBoundingClientRect();
-
-      // Calculate the position of the mouse relative to the element
-      const x = clientX - rect.left;
-
-      positionDelta.current = x / timelineContaienrRef.current.offsetWidth;
-
-      setCurrentTime(positionDelta.current * max);
+      calculatePositionOfCursor(e);
     }
   }, []);
 
@@ -57,6 +61,7 @@ function NewProgressBar() {
       <TimelineContainer
         ref={timelineContaienrRef}
         onMouseMove={mouseMove}
+        onMouseDown={calculatePositionOfCursor}
         // onWheel={wheel}
       >
         <CursorMarker positionDelta={currentTime / max} />
