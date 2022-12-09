@@ -26,12 +26,12 @@ function Controllers() {
           {mode === 'recording' ? (
             <RadioButtonOnOutline
               color={theme.colors.primary}
-              style={{ verticalAlign: 'middle', cursor: 'pointer' }}
+              style={{ verticalAlign: 'middle' }}
             />
           ) : (
             <RadioButtonOffOutline
               color={theme.colors.primary}
-              style={{ verticalAlign: 'middle', cursor: 'pointer' }}
+              style={{ verticalAlign: 'middle' }}
             />
           )}
         </IconContaier>
@@ -42,26 +42,26 @@ function Controllers() {
           {mode === 'playing' ? (
             <PauseOutline
               color={theme.colors.primary}
-              style={{ verticalAlign: 'middle', cursor: 'pointer' }}
+              style={{ verticalAlign: 'middle' }}
             />
           ) : (
             <PlayOutline
               color={theme.colors.primary}
-              style={{ verticalAlign: 'middle', cursor: 'pointer' }}
+              style={{ verticalAlign: 'middle' }}
             />
           )}
         </IconContaier>
 
         <IconContaier
           disabled={mode === 'rendering'}
-          onClick={() => setMode('rendering')}
+          onClick={() => setMode('prep-render')}
         >
           {mode === 'rendering' ? (
             <Spinner />
           ) : (
             <ImageOutline
               color={theme.colors.primary}
-              style={{ verticalAlign: 'middle', cursor: 'pointer' }}
+              style={{ verticalAlign: 'middle' }}
             />
           )}
         </IconContaier>

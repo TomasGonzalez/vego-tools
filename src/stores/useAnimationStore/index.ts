@@ -1,11 +1,18 @@
 import create from 'zustand';
 import config from '../../constants/config';
 
+/*
+ *  Mode should go into another store,
+ *  one for the editor's general settings, but for now It stays here.
+ */
+
 type TMode =
   | 'default'
   | 'recording'
   | 'playing'
+  | 'prep-render'
   | 'rendering'
+  | 'render-results'
   | 'preparing'
   | 'ready';
 

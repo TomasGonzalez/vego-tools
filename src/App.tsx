@@ -7,6 +7,7 @@ import VideoTimeline from './components/video-timeline';
 import MainScene from './scenes/main-scene';
 import PreparingCameraModal from './components/preparing-modal';
 import useKalidokit from './hooks/useKalidokit';
+import RenderingModal from './components/rendering-modal';
 
 function App() {
   const { videoElement } = useKalidokit();
@@ -19,6 +20,7 @@ function App() {
           <MainScene />
           <VideoTimeline />
           <PreparingCameraModal />
+          <RenderingModal />
         </ModalProvider>
       </ThemeProvider>
     </MainContainer>

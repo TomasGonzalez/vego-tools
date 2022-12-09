@@ -10,7 +10,7 @@ const rotate = keyframes`
   }
 `;
 
-const Spinner = styled.div<{ size: string }>`
+const Spinner = styled.div<{ size?: string }>`
   animation: ${rotate} 1s linear infinite;
   border: 2px solid ${(props) => props.theme.colors.dark};
   border-radius: 50%;
@@ -19,7 +19,7 @@ const Spinner = styled.div<{ size: string }>`
   height: ${(props) => props.size || '1em'};
 `;
 
-function LoadingSpinner<T>({ size }: { size: string } & T) {
+function LoadingSpinner<T>({ size }: { size?: string } & T) {
   return <Spinner size={size} />;
 }
 
