@@ -3,13 +3,13 @@ import { ModalProvider } from 'styled-react-modal';
 
 import theme from '../theme';
 import DraggableVideoScreen from './components/draggable-video-screen';
-import useVCaptureLogic from './hooks/useVCaptureLogic';
 import VideoTimeline from './components/video-timeline';
 import MainScene from './scenes/main-scene';
 import PreparingCameraModal from './components/preparing-modal';
+import useKalidokit from './hooks/useKalidokit';
 
 function App() {
-  const { videoElement } = useVCaptureLogic();
+  const { videoElement } = useKalidokit();
 
   return (
     <MainContainer>

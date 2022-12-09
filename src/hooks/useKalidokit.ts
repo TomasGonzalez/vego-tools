@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Face, Pose, Hand, TFace, TPose, THand } from 'kalidokit';
 import {
   FACEMESH_TESSELATION,
@@ -13,8 +13,10 @@ import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils';
 import useCharacterStore from '../stores/useCharacterStore';
 import useAnimationStore from '../stores/useAnimationStore';
 
-const useKalidokit = (videoElement: any, cameraRef: any) => {
-  const mode = useAnimationStore((state) => state.mode);
+const useKalidokit = () => {
+  const cameraRef = useRef<any>(null);
+  const videoElement = useRef<any>(null);
+
   useEffect(() => {
     if (!useCharacterStore.getState().holistic) {
       const holistic = new Holistic({
@@ -41,6 +43,10 @@ const useKalidokit = (videoElement: any, cameraRef: any) => {
       let canvasCtx = guideCanvas.getContext('2d');
       canvasCtx.save();
       canvasCtx.clearRect(0, 0, guideCanvas.width, guideCanvas.height);
+
+      if (useAnimationStore.getState().mode === 'preparing') {
+        useAnimationStore.getState().setMode('ready');
+      }
 
       // Use `Mediapipe` drawing functions
       drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {
@@ -131,27 +137,39 @@ const useKalidokit = (videoElement: any, cameraRef: any) => {
           .setLeftHandRig(Hand.solve(leftHandlm, 'Left') as THand<'Left'>);
     });
 
-    (async function initCamara() {
-      cameraRef.current = new Camera(videoElement.current, {
-        onFrame: async () => {
-          if (useAnimationStore.getState().mode !== 'recording') return;
+    if (!cameraRef.current) {
+      (async function initCamara() {
+        cameraRef.current = new Camera(videoElement.current, {
+          onFrame: async () => {
+            if (
+              !['recording', 'preparing', 'ready'].includes(
+                useAnimationStore.getState().mode
+              )
+            )
+              return;
 
-          return await useCharacterStore
-            .getState()
-            .holistic?.send({ image: videoElement.current });
-        },
-        width: 900,
-        height: 600,
-      });
-    })();
+            return await useCharacterStore
+              .getState()
+              .holistic?.send({ image: videoElement.current });
+          },
+          width: 900,
+          height: 600,
+        });
+      })();
+      cameraRef.current.start();
+    }
   }, [cameraRef, videoElement]);
 
-  useEffect(() => {
-    (() =>
-      mode === 'recording'
-        ? cameraRef?.current?.start()
-        : cameraRef?.current?.stop())();
-  }, [mode]);
+  // useEffect(() => {
+  //   if (cameraRef.current) {
+  //     (() =>
+  //       ['recording', 'preparing', 'ready'].includes(mode)
+  //         ? cameraRef?.current?.start()
+  //         : cameraRef?.current?.stop())();
+  //   }
+  // }, [mode]);
+
+  return { videoElement };
 };
 
 export default useKalidokit;

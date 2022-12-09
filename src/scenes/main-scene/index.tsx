@@ -9,9 +9,11 @@ import { Color } from 'three';
 
 function WrappedCanvas() {
   const { scene } = useThree();
+
   useEffect(() => {
     scene.background = new Color('#fff');
   }, []);
+
   // Animate timeline on playing
   useFrame(({}, delta) => {
     if (useAnimationStore.getState().mode === 'playing') {
