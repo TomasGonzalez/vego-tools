@@ -10,7 +10,10 @@ function PreparingCameraModal() {
   const mode = useAnimationStore((store) => store.mode);
 
   return (
-    <StyledModal isOpen={['preparing', 'ready'].includes(mode)}>
+    <StyledModal
+      onBackgroundClick={() => setMode('default')}
+      isOpen={['preparing', 'ready'].includes(mode)}
+    >
       {mode === 'preparing' ? (
         <LoaderContainer>
           <Spinner size={'50px'} />
