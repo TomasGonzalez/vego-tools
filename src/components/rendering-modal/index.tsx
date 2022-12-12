@@ -3,20 +3,33 @@ import Modal from 'styled-react-modal';
 
 import useAnimationStore from '../../stores/useAnimationStore';
 import Button from '../button';
+import LoadingSpinner from '../spinner';
 
 function RenderingModal() {
+  const renderBlob = useAnimationStore((store) => store.renderBlob);
   const mode = useAnimationStore((store) => store.mode);
   const setMode = useAnimationStore((store) => store.setMode);
 
-  const container =
-    mode === 'rendering' ? (
-      <ModalContainer>Loading...</ModalContainer>
-    ) : (
+  let container = <LoadingSpinner />;
+
+  if (mode === 'prep-render') {
+    container = (
       <ModalContainer>
         <Button onClick={() => setMode('default')}> Cancel </Button>
         <Button onClick={() => setMode('rendering')}>Start rendering</Button>
       </ModalContainer>
     );
+  }
+
+  if (mode === 'render-results') {
+    container = (
+      <ModalContainer>
+        <DownloadClip href={renderBlob} download='My Animation.webm'>
+          Download your animation
+        </DownloadClip>
+      </ModalContainer>
+    );
+  }
 
   return (
     <StyledModal
@@ -27,6 +40,13 @@ function RenderingModal() {
     </StyledModal>
   );
 }
+
+const DownloadClip = styled.a`
+  color: ${(props) => props.theme.colors.primary};
+  padding: 8px;
+  background-color: ${(props) => props.theme.colors.third};
+  border-radius: 4px;
+`;
 
 const ModalContainer = styled.div`
   display: flex;

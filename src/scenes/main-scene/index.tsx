@@ -42,6 +42,7 @@ function MainScene() {
         camera.position.y = 2;
         camera.updateProjectionMatrix();
       }}
+      gl={{ preserveDrawingBuffer: true }}
       style={{
         height: '100%',
         width: '100%',

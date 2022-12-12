@@ -13,8 +13,8 @@ type TMode =
   | 'prep-render'
   | 'rendering'
   | 'render-results'
-  | 'preparing'
-  | 'ready';
+  | 'preparing' // preparing the AI model for recording
+  | 'ready'; // AI model is ready now you can record whenever
 
 interface TAState {
   timeLimit: number;
@@ -27,6 +27,8 @@ interface TAState {
   addTime: (timeDelta: number) => void;
   mode: TMode;
   setMode: (newMode: TMode) => void;
+  renderBlob: undefined | string;
+  setRenderBlob: (newRenderBlob: string | undefined) => void;
 }
 
 const useAnimationStore = create<TAState>()((set, get) => ({
@@ -45,6 +47,8 @@ const useAnimationStore = create<TAState>()((set, get) => ({
     })),
   mode: 'default',
   setMode: (newMode) => set({ mode: newMode }),
+  renderBlob: undefined,
+  setRenderBlob: (newRenderBlob) => set({ renderBlob: newRenderBlob }),
 }));
 
 export default useAnimationStore;
