@@ -40,7 +40,7 @@ const useAnimationStore = create<TAState>()((set, get) => ({
     set(() => ({ animationRecordTime: newATLimit })),
   setCurrentTime: (newTime: number) => set(() => ({ currentTime: newTime })),
   setTimeNextFrame: () =>
-    set(() => ({ currentTime: get().currentTime + config.renderFPS })),
+    set(() => ({ currentTime: get().currentTime + 1 / config.renderFPS })), // 1 is the frame per second
   addTime: (timeDelta) =>
     set(() => ({
       currentTime: (timeDelta + get().currentTime) % get().timeLimit,

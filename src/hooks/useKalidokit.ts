@@ -160,15 +160,6 @@ const useKalidokit = () => {
     }
   }, [cameraRef, videoElement]);
 
-  // useEffect(() => {
-  //   if (cameraRef.current) {
-  //     (() =>
-  //       ['recording', 'preparing', 'ready'].includes(mode)
-  //         ? cameraRef?.current?.start()
-  //         : cameraRef?.current?.stop())();
-  //   }
-  // }, [mode]);
-
   return { videoElement };
 };
 

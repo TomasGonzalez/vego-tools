@@ -48,7 +48,7 @@ function useRenderScene() {
 
           await ffmpeg.run(
             '-framerate',
-            '30',
+            `${60}`,
             '-pattern_type',
             'glob',
             '-i',
