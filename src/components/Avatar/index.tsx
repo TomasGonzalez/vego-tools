@@ -51,11 +51,9 @@ const Avatar = ({ modelUrl }: { modelUrl: string }) => {
     }
   }, [mode]);
 
-  useHandleMovement(mode, recordingTime);
+  useHandleMovement(mode, recordingTime, clock);
 
   useFrame(({}, delta) => {
-    if (useAnimationStore.getState().mode === 'recording')
-      useAnimationStore.getState().addTime(clock.current.getDelta());
     avatar?.update(delta);
   });
 

@@ -1,7 +1,7 @@
 import { useFrame } from '@react-three/fiber';
-import { RefObject } from 'react';
+import { MutableRefObject } from 'react';
+import { Clock } from 'three';
 
-import config from '../../../constants/config';
 import useAnimationStore from '../../../stores/useAnimationStore';
 import useMainStore from '../../../stores/useCharacterStore';
 import useCaptureMovement from './useCaptureMovement';
@@ -9,7 +9,11 @@ import useFaceTracker from './useUpdateFace';
 import useHandsTracker from './useUpdateHands';
 import usePoseTracker from './useUpdatePose';
 
-function useHandleMovement(mode: string, recordingTime: number) {
+function useHandleMovement(
+  mode: string,
+  recordingTime: number,
+  avatarAnimationClock: MutableRefObject<Clock>
+) {
   const riggedPose = useMainStore(({ poseRig }) => poseRig);
   const riggedFace = useMainStore(({ faceRig }) => faceRig);
   const riggedLeftHandRig = useMainStore(({ leftHandRig }) => leftHandRig);
@@ -19,28 +23,29 @@ function useHandleMovement(mode: string, recordingTime: number) {
   const applyFace = useFaceTracker();
   const applyHands = useHandsTracker();
 
-  const {
-    recordPoseMovement,
-    recordFaceMovement,
-    recordLeftHandMovement,
-    recordRightHandMovement,
-  } = useCaptureMovement();
+  const { recordMovement } = useCaptureMovement();
 
-  useFrame(() => {
+  useFrame((_, delta) => {
     switch (mode) {
       case 'recording':
-        recordPoseMovement.current.push(riggedPose);
-
+        // Apply the movement
         if (riggedPose) applyPose(riggedPose);
-
-        recordFaceMovement.current.push(riggedFace);
-
         if (riggedFace) applyFace(riggedFace);
-
-        recordRightHandMovement.current.push(riggedRightHandRig);
-        recordLeftHandMovement.current.push(riggedLeftHandRig);
-
         applyHands(riggedLeftHandRig, riggedRightHandRig);
+
+        // Move the animation cursor
+        useAnimationStore.getState().addTime(delta);
+
+        // Record the movement
+        recordMovement.current.set(
+          avatarAnimationClock.current.getElapsedTime(),
+          {
+            pose: riggedPose,
+            face: riggedFace,
+            leftHand: riggedLeftHandRig,
+            rightHandRig: riggedRightHandRig,
+          }
+        );
 
         break;
 
@@ -48,26 +53,28 @@ function useHandleMovement(mode: string, recordingTime: number) {
       case 'default':
       case 'rendering':
       case 'playing':
-        if (recordPoseMovement.current && recordFaceMovement.current) {
-          let indexAtPercentage = 0;
+        if (recordMovement.current) {
+          const { currentTime } = useAnimationStore.getState();
+          let indexAtCurrentTime = 0;
+          let minDiff = Number.MAX_VALUE;
 
-          if (
-            recordingTime &&
-            recordingTime <= useAnimationStore.getState().timeLimit
-          ) {
-            indexAtPercentage = Math.round(
-              ((recordPoseMovement.current.length - 1) *
-                useAnimationStore.getState().currentTime) /
-                recordingTime // Amount of recording time for this object
-            );
+          for (const key of recordMovement.current.keys()) {
+            const diff = Math.abs(key - currentTime);
+
+            if (diff < minDiff) {
+              indexAtCurrentTime = key;
+              minDiff = diff;
+            }
           }
 
-          applyPose(recordPoseMovement.current[indexAtPercentage]);
-          applyFace(recordFaceMovement.current[indexAtPercentage]);
-          applyHands(
-            recordLeftHandMovement.current[indexAtPercentage],
-            recordRightHandMovement.current[indexAtPercentage]
-          );
+          if (recordMovement.current.has(indexAtCurrentTime)) {
+            const { pose, face, leftHand, rightHand } =
+              recordMovement.current.get(indexAtCurrentTime);
+
+            applyPose(pose);
+            applyFace(face);
+            applyHands(leftHand, rightHand);
+          }
         }
         break;
 

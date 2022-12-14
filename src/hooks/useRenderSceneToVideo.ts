@@ -2,6 +2,7 @@ import { useRef, useEffect } from 'react';
 import { createFFmpeg } from '@ffmpeg/ffmpeg';
 
 import useAnimationStore from '../stores/useAnimationStore';
+import config from '../constants/config';
 
 function useRenderScene() {
   const canvasRef = useRef<any>();
@@ -48,7 +49,7 @@ function useRenderScene() {
 
           await ffmpeg.run(
             '-framerate',
-            `${60}`,
+            `${config.renderFPS}`,
             '-pattern_type',
             'glob',
             '-i',
