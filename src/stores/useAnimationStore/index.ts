@@ -23,6 +23,8 @@ interface TAState {
   setCurrentTime: (newTime: number) => void;
   animationRecordTime: number;
   setAnimationRecordTime: (newATLimit: number) => void;
+  audioData: any[];
+  pushAudioChunks: (newAudioData: any) => void;
   setTimeNextFrame: () => void;
   addTime: (timeDelta: number) => void;
   mode: TMode;
@@ -36,6 +38,11 @@ const useAnimationStore = create<TAState>()((set, get) => ({
   step: 0.001,
   currentTime: 0,
   animationRecordTime: 0,
+  audioData: [],
+  pushAudioChunks: (newAudioData: any) =>
+    set(() => ({
+      audioData: [...get().audioData, newAudioData],
+    })),
   setAnimationRecordTime: (newATLimit) =>
     set(() => ({ animationRecordTime: newATLimit })),
   setCurrentTime: (newTime: number) => set(() => ({ currentTime: newTime })),

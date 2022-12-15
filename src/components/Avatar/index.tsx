@@ -4,8 +4,9 @@ import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Clock } from 'three';
 
-import useMainStore from '../../stores/useCharacterStore';
 import useHandleMovement from './hooks/useHandleMovement';
+import useHandleAudio from './hooks/useHandleAudio';
+import useMainStore from '../../stores/useCharacterStore';
 import useAnimationStore from '../../stores/useAnimationStore';
 
 export type TMode = 'record' | 'play';
@@ -25,6 +26,9 @@ const Avatar = ({ modelUrl }: { modelUrl: string }) => {
   const clock = useRef(new Clock(false));
 
   const [recordingTime, setRecordingTime] = useState(0);
+
+  useHandleMovement(mode, recordingTime, clock);
+  useHandleAudio();
 
   useEffect(() => {
     if (useAnimationStore.getState().animationRecordTime < recordingTime) {
@@ -50,8 +54,6 @@ const Avatar = ({ modelUrl }: { modelUrl: string }) => {
         break;
     }
   }, [mode]);
-
-  useHandleMovement(mode, recordingTime, clock);
 
   useFrame(({}, delta) => {
     avatar?.update(delta);
