@@ -1,4 +1,7 @@
+import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
+
+import useAnimationStore from '../../stores/useAnimationStore';
 import Controllers from './controllers';
 import NewProgressBar from './new-progress-bar';
 
@@ -12,8 +15,19 @@ const MainContainer = styled.div`
 `;
 
 function VideoTimeline() {
+  const audioUrl = useRef<string>();
+  const mode = useAnimationStore((store: any) => store.mode);
+  const audioData = useAnimationStore((store) => store.audioData);
+
+  useEffect(() => {
+    const blob = new Blob(audioData, { type: 'audio/ogg; codecs=opus' });
+
+    audioUrl.current = window.URL.createObjectURL(blob);
+  }, []);
+
   return (
     <MainContainer>
+      {audioUrl.current && <audio controls src={audioUrl.current} />}
       <NewProgressBar />
       <Controllers />
     </MainContainer>

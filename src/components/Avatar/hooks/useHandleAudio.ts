@@ -21,7 +21,6 @@ function useHandleAudio() {
             audio: true,
           }
         )
-
         // Success callback
         .then((_stream) => {
           stream.current = _stream;
